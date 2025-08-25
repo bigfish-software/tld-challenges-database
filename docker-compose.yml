@@ -1,7 +1,13 @@
 version: "3.8"
 
+networks:
+  tld-challenges:
+    external: true
+
 services:
   db:
+    container_name: tld-challenges-db
+    image: tld-challenges-db:latest
     build:
       context: ./db
       dockerfile: Dockerfile
@@ -11,3 +17,5 @@ services:
       - "5432:5432"
     volumes:
       - ./db/data:/var/lib/postgresql/data
+    networks:
+      - tld-challenges

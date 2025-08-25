@@ -56,15 +56,35 @@ cd tld-challenges-database
 cp db/.env.sample db/.env
 # Edit db/.env with your preferred database credentials
 
+# Create the shared Docker network (required for multi-container setup)
+docker network create tld-challenges
+
+# Build the database image (if you change the Dockerfile or image name)
+docker-compose build
+
 # Start PostgreSQL container
 docker-compose up -d
 
 # Verify database is running
-docker-compose ps
+# The container name should be 'tld-challenges-db' and the network 'tld-challenges'
+docker ps
+# The image name should be 'tld-challenges-db:latest' (if set in docker-compose.yml)
+
+# Troubleshooting
+# If you see network errors, ensure the 'tld-challenges' network exists:
+docker network ls
+# If missing, create it as shown above.
 ```
 
 ### Production Deployment
 Database deployment occurs via Docker containers, integrated with the broader TLD Challenges platform infrastructure.
+
+## Docker Compose Details
+- **Container Name**: `tld-challenges-db`
+- **Image Name**: `tld-challenges-db:latest` (if specified)
+- **Network**: `tld-challenges` (external)
+
+These names are set in `docker-compose.yml` and help with multi-container orchestration and troubleshooting.
 
 ## Database Schema Management
 
