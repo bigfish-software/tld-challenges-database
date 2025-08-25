@@ -48,13 +48,22 @@ A web platform for The Long Dark community to manage challenges, tournaments, cu
 ## Repository Context
 
 ### Purpose
-PostgreSQL database local setup, deployment and migration management for www.tld-challenges.com.
+PostgreSQL database container setup, deployment, and data seeding for www.tld-challenges.com.
 
 ### Technology Stack
-- PostgreSQL 14+
+- PostgreSQL 17 (Alpine)
 - Docker container deployment
-- Migration scripts
+- Database seeding scripts
+- Environment configuration management
 
-### Data Access
-- Accessed exclusively through Strapi backend
-- Migration strategies
+### Database Management Philosophy
+- **Schema Management**: Handled entirely by Strapi through content-type definitions and automatic migrations
+- **Data Access**: Exclusively through Strapi backend API, never direct database connections from frontend
+- **Seeding Strategy**: Initial data population through standalone scripts or Strapi bootstrap functions
+- **Container Focus**: This repository manages PostgreSQL container setup, not schema definitions
+
+### Critical Constraints
+- Database schema changes occur through Strapi content-types, not SQL DDL
+- Direct database access limited to seeding and administrative operations
+- All application data flow must route through Strapi API layer
+- Container must coordinate with Strapi backend service in production environment
