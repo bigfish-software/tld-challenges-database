@@ -48,22 +48,30 @@ A web platform for The Long Dark community to manage challenges, tournaments, cu
 ## Repository Context
 
 ### Purpose
-PostgreSQL database container setup, deployment, and data seeding for www.tld-challenges.com.
+PostgreSQL database container setup, deployment, and data management for www.tld-challenges.com.
 
 ### Technology Stack
 - PostgreSQL 17 (Alpine)
-- Docker container deployment
-- Database seeding scripts
+- Docker container deployment with external network integration
+- Database seeding scripts and initial data population
 - Environment configuration management
 
 ### Database Management Philosophy
-- **Schema Management**: Handled entirely by Strapi through content-type definitions and automatic migrations
-- **Data Access**: Exclusively through Strapi backend API, never direct database connections from frontend
-- **Seeding Strategy**: Initial data population through standalone scripts or Strapi bootstrap functions
-- **Container Focus**: This repository manages PostgreSQL container setup, not schema definitions
+- **Schema Management**: Handled entirely by Strapi v5+ through content-type definitions and automatic migrations
+- **Data Access**: Exclusively through Strapi backend API layer, never direct frontend-database communication
+- **Seeding Strategy**: Initial data population through Strapi bootstrap functions or standalone scripts
+- **Container Focus**: This repository manages PostgreSQL container orchestration, not schema definitions
+- **Network Architecture**: External 'tld-challenges' network for multi-container coordination
 
 ### Critical Constraints
-- Database schema changes occur through Strapi content-types, not SQL DDL
-- Direct database access limited to seeding and administrative operations
-- All application data flow must route through Strapi API layer
-- Container must coordinate with Strapi backend service in production environment
+- Database schema changes occur through Strapi content-types in backend repository, not SQL DDL here
+- Direct database access limited to seeding, backup, and administrative operations
+- All application data flow must route through Strapi API layer (backend → database)
+- Container must coordinate with Strapi backend service via shared Docker network
+- Production deployment integrates with managed PostgreSQL instances on hosting platforms
+
+### Content Type Architecture (Backend Managed)
+- **7 Main Entities**: Challenge, Submission, Tournament, CustomCode, Rule, Creator, FAQ
+- **Draft/Publish Workflow**: All content types support moderation workflow
+- **Anonymous Submissions**: Special endpoint for public submission creation (starts as draft)
+- **Relationship Patterns**: Many-to-Many for shared concepts (rules, FAQs, creators), Many-to-One for ownership (challenges→tournaments)
